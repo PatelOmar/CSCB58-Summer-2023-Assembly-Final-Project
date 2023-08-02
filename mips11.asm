@@ -154,6 +154,7 @@ player_move:
 	li $t9, 0xffff0000
 	lw $t8, 0($t9)
 	beq $t8, 1, keypress_happened
+	j player_move_end
 
 keypress_happened:
 	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
@@ -162,32 +163,85 @@ keypress_happened:
 	beq $t2, 0x77, respond_to_w # ASCII code of 'a' is 0x61 or 97 in decimal
 	
 	beq $t2, 0x64, respond_to_d # ASCII code of 'a' is 0x61 or 97 in decimal
+	
 	j player_move_end
+	
 respond_to_a:
-	li $v0, 1
-	li $a0, 61
+	
+player_move_left:
+	la  $s0, CHARACTER_BOUNDARIES
+	jal erase_boundary
+	
+	li $v0, 32
+	li $a0, 1000 # Wait one second (1000 milliseconds)
 	syscall
+	
+	# Get Column Start
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 8($s0)
+	addi $t1, $t1, -1
+	sw $t1, 12($s0)
+	lw $t1, 4($s0)
+	addi $t1, $t1, -1
+	sw $t1, 4($s0)	
+	
+	li $v0, 32
+	li $a0, 1000 # Wait one second (1000 milliseconds)
+	syscall
+	
+	la  $s0, CHARACTER_BOUNDARIES
+	jal print_boundary
+	
+	li $v0, 32
+	li $a0, 1000 # Wait one second (1000 milliseconds)
+	syscall
+	
 	j player_move_end
+	
 respond_to_w:
-	li $v0, 1
-	li $a0, 77
+	
+player_move_up:
+	la  $s0, CHARACTER_BOUNDARIES
+	jal erase_boundary
+	
+	li $v0, 32
+	li $a0, 1000 # Wait one second (1000 milliseconds)
 	syscall
+	
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	lw $t1, 0($s0)
+	addi $t1, $t1, -1
+	sw $t1, 0($s0)
+	lw $t1, 4($s0)
+	addi $t1, $t1, -1
+	sw $t1, 4($s0)	
+	
+	li $v0, 32
+	li $a0, 1000 # Wait one second (1000 milliseconds)
+	syscall	
+	
+	la  $s0, CHARACTER_BOUNDARIES
+	jal print_boundary
+	
+	li $v0, 32
+	li $a0, 1000 # Wait one second (1000 milliseconds)
+	syscall	
+	
 	j player_move_end
+	
 respond_to_d:
-	li $v0, 1
-	li $a0, 64
-	syscall
 	j player_move_end
 
 player_move_end:
 	li $v0, 32
-	li $a0, 10000 # Wait one second (1000 milliseconds)
+	li $a0, 2000 # Wait one second (1000 milliseconds)
 	syscall	
 	j player_move
-	
-	
-	
-		
 			
 					
 	# ------------------------------------
@@ -225,6 +279,58 @@ player_move_end:
 	
 #end_print_boundary1:
 #	jr $ra	
+
+erase_boundary:
+	li $t0, BASE_ADDRESS
+	addi $sp, $sp, 4
+	sw $ra, 0($sp)
+	
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	
+	# Calculate Boundaries
+	# Calculate  Top
+	# Calc Top Left
+	lw $a0, 8($s0)
+	lw $a1, 0($s0)
+	jal xy_offset
+		
+	add $t2, $t0, $v0 
+	sw $zero, ($t2)
+	# Calc Top Right
+	lw $a0, 12($s0)
+	lw $a1, 0($s0)
+	jal xy_offset
+		
+	add $t2, $t0, $v0 
+	sw $zero, ($t2)
+	
+	# Calculate Bottom
+	# Calc Bottom Left
+	lw $a0, 8($s0)
+	lw $a1, 4($s0)
+	jal xy_offset
+		
+	add $t2, $t0, $v0 
+	sw $zero, ($t2)
+	# Calc Bottom Right
+	lw $a0, 12($s0)
+	lw $a1, 4($s0)
+	jal xy_offset
+		
+	add $t2, $t0, $v0 
+	sw $zero, ($t2)
+	
+end_erase_boundary:
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra		
 	
 print_boundary:
 	li $t0, BASE_ADDRESS
