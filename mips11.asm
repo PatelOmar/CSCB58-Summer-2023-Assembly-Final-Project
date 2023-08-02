@@ -67,25 +67,25 @@ CHARACTER_BOUNDARIES: .word 97, 104, 5, 10
 
 # Platform 1 
 #PLATFORM1_BOUNDARIES: .word 22032, 22092, 24140, 24080
-PLATFORM1_BOUNDARIES: .word 87, 94, 4, 19
+PLATFORM1_BOUNDARIES: .word 87, 94, 5, 20
 .eqv PLATFORM1_BOUNDARIES_LEN 4
 
 # Platform 2
 #PLATFORM2_BOUNDARIES: .word 24596, 24600, 24604, 24608, 24612, 24616, 24872, 25128, 25384, 25640, 25896, 26152, 26388, 26392, 26396, 26400, 26404, 26408, 24852, 25108, 25364, 25620, 25876, 26132
-PLATFORM2_BOUNDARIES: .word 70, 77, 35, 50
+PLATFORM2_BOUNDARIES: .word 70, 77, 36, 51
 .eqv PLATFORM2_BOUNDARIES_LEN 4
 
 # Platform 3
 #PLATFORM3_BOUNDARIES: .word 24596, 24600, 24604, 24608, 24612, 24616, 24872, 25128, 25384, 25640, 25896, 26152, 26388, 26392, 26396, 26400, 26404, 26408, 24852, 25108, 25364, 25620, 25876, 26132
-PLATFORM3_BOUNDARIES: .word 53, 60, 4, 19
+PLATFORM3_BOUNDARIES: .word 53, 60, 5, 20
 .eqv PLATFORM3_BOUNDARIES_LEN 4
 
 # Finish
 #FINISH_BOUNDARIES: .word 24596, 24600, 24604, 24608, 24612, 24616, 24872, 25128, 25384, 25640, 25896, 26152, 26388, 26392, 26396, 26400, 26404, 26408, 24852, 25108, 25364, 25620, 25876, 26132
-FINISH_BOUNDARIES: .word 45, 51, 7, 11
+FINISH_BOUNDARIES: .word 45, 51, 8, 12
 .eqv FINSIH_BOUNDARIES_LEN 4
 
-newline: .asciiz "\n"
+newline: .asciiz "test\n"
 
 .globl main
 .text
@@ -151,9 +151,68 @@ main:
 	# ------------------------------------
 	# Player Move
 player_move:
+	li $v0, 32
+	li $a0, 200 # Wait one second (1000 milliseconds)
+	syscall	
+	
 	li $t9, 0xffff0000
 	lw $t8, 0($t9)
 	beq $t8, 1, keypress_happened
+	
+	
+	la  $s0, CHARACTER_BOUNDARIES
+	jal erase_boundary
+	
+	li $t9, 0xffff0000
+	lw $t8, 0($t9)
+	beq $t8, 1, keypress_happened
+	
+	
+check_within_game_screen_down:
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 0($s0)
+	addi $t1, $t1, 1
+	ble $t1, 4, exit_check_within_game_screen_down
+check_within_game_screen_down_condition1:
+	lw $t1, 4($s0)
+	addi $t1, $t1, 1
+	bgt $t1, 104, exit_check_within_game_screen_down
+check_within_game_screen_down_condition2:
+	lw $t1, 8($s0)
+	ble $t1, 4, exit_check_within_game_screen_down
+check_within_game_screen_down_condition3:
+	lw $t1, 12($s0)
+	bgt $t1, 59, exit_check_within_game_screen_down
+	
+	#li $v0, 4
+	#la $a0, newline
+	#syscall
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	lw $t1, 0($s0)
+	addi $t1, $t1, 1
+	sw $t1, 0($s0)
+	lw $t1, 4($s0)
+	addi $t1, $t1, 1
+	sw $t1, 4($s0)	
+	
+exit_check_within_game_screen_down:	
+	la  $s0, CHARACTER_BOUNDARIES
+	jal print_boundary
+	
+	li $v0, 32
+	li $a0, 400 # Wait one second (1000 milliseconds)
+	syscall	
+	
 	j player_move_end
 
 keypress_happened:
@@ -172,31 +231,54 @@ player_move_left:
 	la  $s0, CHARACTER_BOUNDARIES
 	jal erase_boundary
 	
-	li $v0, 32
-	li $a0, 1000 # Wait one second (1000 milliseconds)
-	syscall
+	#li $v0, 32
+	#li $a0, 500 # Wait one second (1000 milliseconds)
+	#syscall
+check_within_game_screen_left:
+	# Get Row Starts
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 0($s0)
+	ble $t1, 4, exit_check_within_game_screen_left
+check_within_game_screen_left_condition1:
+	lw $t1, 4($s0)
+	bgt $t1, 104, exit_check_within_game_screen_left
+check_within_game_screen_left_condition2:
+	lw $t1, 8($s0)
+	addi $t1, $t1, -3
+	ble $t1, 3, exit_check_within_game_screen_left
+check_within_game_screen_left_condition3:
+	lw $t1, 12($s0)
+	addi $t1, $t1, -3
+	bgt $t1, 59, exit_check_within_game_screen_left
+	
 	
 	# Get Column Start
 	# 8($s0)
 	# Get Column End
 	# 12($s0)
 	lw $t1, 8($s0)
-	addi $t1, $t1, -1
-	sw $t1, 12($s0)
-	lw $t1, 4($s0)
-	addi $t1, $t1, -1
-	sw $t1, 4($s0)	
+	addi $t1, $t1, -3
+	sw $t1, 8($s0)
+	lw $t1, 12($s0)
+	addi $t1, $t1, -3
+	sw $t1, 12($s0)	
 	
-	li $v0, 32
-	li $a0, 1000 # Wait one second (1000 milliseconds)
-	syscall
-	
+	#li $v0, 32
+	#li $a0, 500 # Wait one second (1000 milliseconds)
+	#syscall
+exit_check_within_game_screen_left:		
 	la  $s0, CHARACTER_BOUNDARIES
 	jal print_boundary
 	
-	li $v0, 32
-	li $a0, 1000 # Wait one second (1000 milliseconds)
-	syscall
+	#li $v0, 32
+	#li $a0, 1000 # Wait one second (1000 milliseconds)
+	#syscall
 	
 	j player_move_end
 	
@@ -206,41 +288,113 @@ player_move_up:
 	la  $s0, CHARACTER_BOUNDARIES
 	jal erase_boundary
 	
-	li $v0, 32
-	li $a0, 1000 # Wait one second (1000 milliseconds)
-	syscall
+	#li $v0, 32
+	#li $a0, 500 # Wait one second (1000 milliseconds)
+	#syscall
+check_within_game_screen_up:
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 0($s0)
+	addi $t1, $t1, -3
+	ble $t1, 4, exit_check_within_game_screen_up
+check_within_game_screen_up_condition1:
+	lw $t1, 4($s0)
+	addi $t1, $t1, -3
+	bgt $t1, 104, exit_check_within_game_screen_up
+check_within_game_screen_up_condition2:
+	lw $t1, 8($s0)
+	ble $t1, 4, exit_check_within_game_screen_up
+check_within_game_screen_up_condition3:
+	lw $t1, 12($s0)
+	bgt $t1, 59, exit_check_within_game_screen_up
 	
+	#li $v0, 4
+	#la $a0, newline
+	#syscall
 	# Get Row Start
 	# 0($s0)
 	# Get Row End
 	# 4($s0)
 	lw $t1, 0($s0)
-	addi $t1, $t1, -1
+	addi $t1, $t1, -3
 	sw $t1, 0($s0)
 	lw $t1, 4($s0)
-	addi $t1, $t1, -1
+	addi $t1, $t1, -3
 	sw $t1, 4($s0)	
 	
-	li $v0, 32
-	li $a0, 1000 # Wait one second (1000 milliseconds)
-	syscall	
-	
+exit_check_within_game_screen_up:	
 	la  $s0, CHARACTER_BOUNDARIES
 	jal print_boundary
 	
-	li $v0, 32
-	li $a0, 1000 # Wait one second (1000 milliseconds)
-	syscall	
+	#li $v0, 32
+	#li $a0, 500 # Wait one second (1000 milliseconds)
+	#syscall	
 	
 	j player_move_end
 	
 respond_to_d:
+player_move_right:
+	la  $s0, CHARACTER_BOUNDARIES
+	jal erase_boundary
+	
+	#li $v0, 32
+	#li $a0, 500 # Wait one second (1000 milliseconds)
+	#syscall
+check_within_game_screen_right:
+	# Get Row Starts
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 0($s0)
+	ble $t1, 4, exit_check_within_game_screen_right
+check_within_game_screen_right_condition1:
+	lw $t1, 4($s0)
+	bgt $t1, 104, exit_check_within_game_screen_right
+check_within_game_screen_right_condition2:
+	lw $t1, 8($s0)
+	addi $t1, $t1, 3
+	ble $t1, 3, exit_check_within_game_screen_right
+check_within_game_screen_right_condition3:
+	lw $t1, 12($s0)
+	addi $t1, $t1, 3
+	bgt $t1, 59, exit_check_within_game_screen_right
+	
+	
+	# Get Column Start
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 8($s0)
+	addi $t1, $t1, 3
+	sw $t1, 8($s0)
+	lw $t1, 12($s0)
+	addi $t1, $t1, 3
+	sw $t1, 12($s0)	
+	
+	#li $v0, 32
+	#li $a0, 500 # Wait one second (1000 milliseconds)
+	#syscall
+exit_check_within_game_screen_right:		
+	la  $s0, CHARACTER_BOUNDARIES
+	jal print_boundary
+	
+	#li $v0, 32
+	#li $a0, 500 # Wait one second (1000 milliseconds)
+	#syscall	
+	
 	j player_move_end
 
 player_move_end:
-	li $v0, 32
-	li $a0, 2000 # Wait one second (1000 milliseconds)
-	syscall	
 	j player_move
 			
 					
@@ -475,16 +629,16 @@ paint_walls_loop:
 	addi $sp, $sp, 4
 	
 
-	bge $t9, 4, condition1
+	bge $t9, 5, condition1
 	j else_paint_walls_loop
 condition1:
 	ble $t9, 103, condition2
 	j else_paint_walls_loop
 condition2:
-	bge $t8, 4, condition3
+	bge $t8, 5, condition3
 	j else_paint_walls_loop
 condition3:
-	ble $t8, 59, exit_paint_walls_loop
+	ble $t8, 58, exit_paint_walls_loop
 else_paint_walls_loop:	
 	sw $t2, ($t0)
 	
