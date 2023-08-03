@@ -1085,6 +1085,7 @@ draw_loop:
     li $v0, 1
     move $a0, $t4
     syscall
+    beq $t4, -1, end_draw
     addi $t2, $t2, 4
     j draw_loop
 	
