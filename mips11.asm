@@ -1119,7 +1119,6 @@ end_draw:
 
 erase_draw:
 	li $t0, BASE_ADDRESS
-	la $t1, $zero
     add $t6, $zero, $zero
 	addi $sp, $sp, 4
 	sw $ra, 0($sp)
@@ -1150,7 +1149,7 @@ erase_draw_end_position:
 erase_draw_loop:
     bgt $t5, $t8, draw_update
 
-    sw $t4, ($t5)
+    sw $zero, ($t5)
     addi $t5, $t5, 4
 
 
