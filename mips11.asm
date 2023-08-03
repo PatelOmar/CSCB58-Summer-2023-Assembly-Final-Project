@@ -345,14 +345,14 @@ check_platform1_collision_left:
 	lw $t1, 0($s0)
 	
 	la $s1, PLATFORM1_BOUNDARIES
-	lw $t2, 0($s1)
+	lw $t2, 4($s1)
 	
-	bge $t1, $t2, check_platform1_collision_left_condition1
+	ble $t1, $t2, check_platform1_collision_left_condition1
 	j check_platform2_collision_left
 check_platform1_collision_left_condition1:
 	lw $t1, 4($s0)
-	lw $t2, 4($s1)
-	ble $t1, $t2, check_platform1_collision_left_condition2
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform1_collision_left_condition2
 	j check_platform2_collision_left
 check_platform1_collision_left_condition2:
 	lw $t1, 8($s0)
@@ -361,32 +361,34 @@ check_platform1_collision_left_condition2:
 	ble $t1, $t2, check_platform1_collision_left_condition3
 	j check_platform2_collision_left
 check_platform1_collision_left_condition3:
-	lw $t1, 8($s0)
-	lw $t2, 12($s1)
+	lw $t1, 12($s0)
+	addi $t1, $t1, -3
+	lw $t2, 8($s1)
 	ble $t2, $t1, exit_check_within_game_screen_left
 	j check_platform2_collision_left
 	
 check_platform2_collision_left:
-	lw $t1, 4($s0)
-	addi $t1, $t1, 1
+	lw $t1, 0($s0)
 	
 	la $s1, PLATFORM2_BOUNDARIES
-	lw $t2, 0($s1)
+	lw $t2, 4($s1)
 	
-	bge $t1, $t2, check_platform2_collision_left_condition1
+	ble $t1, $t2, check_platform2_collision_left_condition1
 	j check_platform3_collision_left
 check_platform2_collision_left_condition1:
 	lw $t1, 4($s0)
-	lw $t2, 4($s1)
-	ble $t1, $t2, check_platform2_collision_left_condition2
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform2_collision_left_condition2
 	j check_platform3_collision_left
 check_platform2_collision_left_condition2:
 	lw $t1, 8($s0)
+	addi $t1, $t1, -3
 	lw $t2, 12($s1)
 	ble $t1, $t2, check_platform2_collision_left_condition3
 	j check_platform3_collision_left
 check_platform2_collision_left_condition3:
 	lw $t1, 12($s0)
+	addi $t1, $t1, -3
 	lw $t2, 8($s1)
 	ble $t2, $t1, exit_check_within_game_screen_left
 	j check_platform3_collision_left
@@ -394,29 +396,29 @@ check_platform2_collision_left_condition3:
 
 check_platform3_collision_left:
 	
-	lw $t1, 4($s0)
-	addi $t1, $t1, 1
-	
+	lw $t1, 0($s0)
 	la $s1, PLATFORM3_BOUNDARIES
-	lw $t2, 0($s1)
+	lw $t2, 4($s1)
 	
-	bge $t1, $t2, check_platform3_collision_left_condition1
+	ble $t1, $t2, check_platform3_collision_left_condition1
 	j process_left_update
 check_platform3_collision_left_condition1:
 	lw $t1, 4($s0)
-	lw $t2, 4($s1)
-	ble $t1, $t2, check_platform3_collision_left_condition2
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform3_collision_left_condition2
 	j process_left_update
 check_platform3_collision_left_condition2:
 	lw $t1, 8($s0)
+	addi $t1, $t1, -3
 	lw $t2, 12($s1)
 	ble $t1, $t2, check_platform3_collision_left_condition3
 	j process_left_update
 check_platform3_collision_left_condition3:
 	lw $t1, 12($s0)
+	addi $t1, $t1, -3
 	lw $t2, 8($s1)
 	ble $t2, $t1, exit_check_within_game_screen_left
-	j process_left_update	
+	j process_left_update 	
 
 process_left_update:	
 	
