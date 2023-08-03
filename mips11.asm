@@ -87,7 +87,7 @@ FINISH_BOUNDARIES: .word 45, 51, 8, 12
 
 # Enemy
 #FINISH_BOUNDARIES: .word 24596, 24600, 24604, 24608, 24612, 24616, 24872, 25128, 25384, 25640, 25896, 26152, 26388, 26392, 26396, 26400, 26404, 26408, 24852, 25108, 25364, 25620, 25876, 26132
-ENEMY_BOUNDARIES: .word 6, 6, 20, 20
+ENEMY_BOUNDARIES: .word 6, 6, 23, 23
 .eqv FINSIH_BOUNDARIES_LEN 4
 
 newline: .asciiz "test\n"
@@ -753,7 +753,128 @@ player_move_end_continued:
 
     la  $s0, ENEMY_BOUNDARIES
 	jal erase_boundary
+enemy_check_within_game_screen_down:
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 0($s0)
+	addi $t1, $t1, 1
+	ble $t1, 4, enemy_exit_check_within_game_screen_down
+enemy_check_within_game_screen_down_condition1:
+	lw $t1, 4($s0)
+	addi $t1, $t1, 1
+	bgt $t1, 104, enemy_exit_check_within_game_screen_down
+enemy_check_within_game_screen_down_condition2:
+	lw $t1, 8($s0)
+	ble $t1, 4, enemy_exit_check_within_game_screen_down
+enemy_check_within_game_screen_down_condition3:
+	lw $t1, 12($s0)
+	bgt $t1, 59, enemy_exit_check_within_game_screen_down
+	
+	#li $v0, 4
+	#la $a0, newline
+	#syscall
+enemy_check_platform1_collision_down:
+	
+	lw $t1, 0($s0)
+	addi $t1, $t1, 1
+	
+	la $s1, PLATFORM1_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, enemy_check_platform1_collision_down_condition1
+	j enemy_check_platform2_collision_down
+enemy_check_platform1_collision_down_condition1:
+	lw $t1, 4($s0)
+	addi $t1, $t1, 1
+	lw $t2, 0($s1)
+	ble $t2, $t1, enemy_check_platform1_collision_down_condition2
+	j enemy_check_platform2_collision_down
+enemy_check_platform1_collision_down_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, enemy_check_platform1_collision_down_condition3
+	j enemy_check_platform2_collision_down
+enemy_check_platform1_collision_down_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, enemy_enemy_exit_check_within_game_screen_down
+	j enemy_check_platform2_collision_down
+	
+enemy_check_platform2_collision_down:
+	lw $t1, 0($s0)
+	addi $t1, $t1, 1
+	
+	la $s1, PLATFORM2_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, enemy_check_platform2_collision_down_condition1
+	j enemy_check_platform3_collision_down
+enemy_check_platform2_collision_down_condition1:
+	lw $t1, 4($s0)
+	addi $t1, $t1, 1
+	lw $t2, 0($s1)
+	ble $t2, $t1, enemy_check_platform2_collision_down_condition2
+	j enemy_check_platform3_collision_down
+enemy_check_platform2_collision_down_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, enemy_check_platform2_collision_down_condition3
+	j enemy_check_platform3_collision_down
+enemy_check_platform2_collision_down_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, enemy_exit_check_within_game_screen_down
+	j enemy_check_platform3_collision_down
+	
 
+enemy_check_platform3_collision_down:
+	
+	lw $t1, 0($s0)
+	addi $t1, $t1, 1
+	
+	la $s1, PLATFORM3_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, enemy_check_platform3_collision_down_condition1
+	j enemy_process_down_update
+enemy_check_platform3_collision_down_condition1:
+	lw $t1, 4($s0)
+	addi $t1, $t1, 1
+	lw $t2, 0($s1)
+	ble $t2, $t1, enemy_check_platform3_collision_down_condition2
+	j enemy_process_down_update
+enemy_check_platform3_collision_down_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, enemy_check_platform3_collision_down_condition3
+	j enemy_process_down_update
+enemy_check_platform3_collision_down_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, enemy_exit_check_within_game_screen_down
+	j enemy_process_down_update 
+	
+
+enemy_process_down_update:
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	lw $t1, 0($s0)
+	addi $t1, $t1, 1
+	sw $t1, 0($s0)
+	lw $t1, 4($s0)
+	addi $t1, $t1, 1
+	sw $t1, 4($s0)	
+	
+enemy_exit_check_within_game_screen_down:	
+	#la  $s0, CHARACTER_BOUNDARIES
 	jal print_boundary
 
 	j player_move
