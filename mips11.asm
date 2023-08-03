@@ -157,9 +157,6 @@ main:
 	#sw $t1, 0($sp)
 	jal print_boundary
 check_reset:
-    li $v0, 32
-	li $a0, 200 # Wait one second (1000 milliseconds)
-	syscall	
     li $t9, 0xffff0000
 	lw $t8, 0($t9)
     beq $t8, 1, reset_happened
