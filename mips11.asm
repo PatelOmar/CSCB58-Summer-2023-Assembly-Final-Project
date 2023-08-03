@@ -156,9 +156,17 @@ main:
 	#addi $sp, $sp, 4
 	#sw $t1, 0($sp)
 	jal print_boundary
+check_reset:
+    li $v0, 32
+	li $a0, 200 # Wait one second (1000 milliseconds)
+	syscall	
+    li $t9, 0xffff0000
+	lw $t8, 0($t9)
+    beq $t8, 1, reset_happened
+    j player_move
 reset_happened:
 	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
-	beq $t2, 0x70, respond_to_a # ASCII code of 'a' is 0x61 or 97 in decimal
+	beq $t2, 0x70, reset_game # ASCII code of 'a' is 0x61 or 97 in decimal
 	
 	j reset_game
 
@@ -939,7 +947,7 @@ enemy_check_character_collision_condition3:
     j enemy_exit_check_within_game_screen_down_continued 
 enemy_exit_check_within_game_screen_down_continued:
 
-	j reset_happened
+	j check_reset
 			
 					
 	# ------------------------------------
@@ -1334,7 +1342,7 @@ reset_enemy:
     li $t0, 23
     sw $t0, 12($s0)
 
-    j reset_happened
+    j check_reset
 
 reset_game:
 	# Get Row Start
