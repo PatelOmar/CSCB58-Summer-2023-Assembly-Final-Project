@@ -1122,7 +1122,7 @@ erase_draw:
     add $t6, $zero, $zero
 	addi $sp, $sp, 4
 	sw $ra, 0($sp)
-
+    lw $t9, 4($s0)
     j draw_position
 
 erase_draw_update:
@@ -1146,7 +1146,7 @@ erase_draw_end_position:
 
 erase_draw_loop:
     bgt $t5, $t8, draw_update
-    bgt $t7, 4($s0), erase_end_draw
+    bgt $t7, $t9, erase_end_draw
 
     sw $zero, ($t5)
     addi $t5, $t5, 4
