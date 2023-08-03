@@ -85,6 +85,11 @@ PLATFORM3_BOUNDARIES: .word 53, 60, 5, 20
 FINISH_BOUNDARIES: .word 45, 51, 8, 12
 .eqv FINSIH_BOUNDARIES_LEN 4
 
+# Enemy
+#FINISH_BOUNDARIES: .word 24596, 24600, 24604, 24608, 24612, 24616, 24872, 25128, 25384, 25640, 25896, 26152, 26388, 26392, 26396, 26400, 26404, 26408, 24852, 25108, 25364, 25620, 25876, 26132
+ENEMY_BOUNDARIES: .word 6, 6, 20, 20
+.eqv FINSIH_BOUNDARIES_LEN 4
+
 newline: .asciiz "test\n"
 
 .globl main
@@ -742,8 +747,15 @@ check_finish_collision_condition3:
 	lw $t2, 8($s1)
 	ble $t2, $t1, end	
     j player_move_end_continued
-    
+
 player_move_end_continued:
+
+
+    la  $s0, ENEMY_BOUNDARIES
+	jal erase_boundary
+
+	jal print_boundary
+
 	j player_move
 			
 					
