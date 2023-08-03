@@ -803,7 +803,7 @@ enemy_check_platform1_collision_down_condition2:
 enemy_check_platform1_collision_down_condition3:
 	lw $t1, 12($s0)
 	lw $t2, 8($s1)
-	ble $t2, $t1, enemy_enemy_exit_check_within_game_screen_down
+	ble $t2, $t1, enemy_exit_check_within_game_screen_down
 	j enemy_check_platform2_collision_down
 	
 enemy_check_platform2_collision_down:
@@ -842,24 +842,47 @@ enemy_check_platform3_collision_down:
 	lw $t2, 4($s1)
 	
 	ble $t1, $t2, enemy_check_platform3_collision_down_condition1
-	j enemy_process_down_update
+	j enemy_check_finish_collision
 enemy_check_platform3_collision_down_condition1:
 	lw $t1, 4($s0)
 	addi $t1, $t1, 1
 	lw $t2, 0($s1)
 	ble $t2, $t1, enemy_check_platform3_collision_down_condition2
-	j enemy_process_down_update
+	j enemy_check_finish_collision
 enemy_check_platform3_collision_down_condition2:
 	lw $t1, 8($s0)
 	lw $t2, 12($s1)
 	ble $t1, $t2, enemy_check_platform3_collision_down_condition3
-	j enemy_process_down_update
+	j enemy_check_finish_collision
 enemy_check_platform3_collision_down_condition3:
 	lw $t1, 12($s0)
 	lw $t2, 8($s1)
 	ble $t2, $t1, enemy_exit_check_within_game_screen_down
-	j enemy_process_down_update 
+	j enemy_check_finish_collision
+
+enemy_check_finish_collision:
 	
+	lw $t1, 0($s0)
+	la $s1, FINISH_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, enemy_check_finish_collision_condition1
+	j enemy_process_down_update 
+enemy_check_finish_collision_condition1:
+	lw $t1, 4($s0)
+	lw $t2, 0($s1)
+	ble $t2, $t1, enemy_check_finish_collision_condition2
+	j enemy_process_down_update 
+enemy_check_finish_collision_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, enemy_check_finish_collision_condition3
+	j enemy_process_down_update 
+enemy_check_finish_collision_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, end	
+    j enemy_process_down_update 
 
 enemy_process_down_update:
 	# Get Row Start
@@ -876,6 +899,31 @@ enemy_process_down_update:
 enemy_exit_check_within_game_screen_down:	
 	#la  $s0, CHARACTER_BOUNDARIES
 	jal print_boundary
+
+enemy_check_character_collision:
+	
+	lw $t1, 0($s0)
+	la $s1, CHARACTER_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, enemy_check_character_collision_condition1
+	j enemy_exit_check_within_game_screen_down_continued
+enemy_check_character_collision_condition1:
+	lw $t1, 4($s0)
+	lw $t2, 0($s1)
+	ble $t2, $t1, enemy_check_character_collision_condition2
+	j enemy_exit_check_within_game_screen_down_continued
+enemy_check_character_collision_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, enemy_check_character_collision_condition3
+	j enemy_exit_check_within_game_screen_down_continued 
+enemy_check_character_collision_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, end	
+    j enemy_exit_check_within_game_screen_down_continued 
+enemy_exit_check_within_game_screen_down_continued:
 
 	j player_move
 			
