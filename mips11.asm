@@ -170,7 +170,7 @@ player_move:
 	
 	
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	li $t9, 0xffff0000
 	lw $t8, 0($t9)
@@ -1123,7 +1123,7 @@ erase_draw:
 	addi $sp, $sp, 4
 	sw $ra, 0($sp)
     lw $t9, 4($s0)
-    j draw_position
+    j erase_draw_position
 
 erase_draw_update:
     addi $t6, $t6, 1
