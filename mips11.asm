@@ -123,6 +123,7 @@ main:
 	la  $s0, CHARACTER_BOUNDARIES
 	jal print_boundary
 	
+    la  $s0, CHARACTER_BOUNDARIES
     la  $s1, CHARACTER
 	jal draw
 
@@ -1078,14 +1079,24 @@ draw:
     add $t2, $zero, $zero
 	addi $sp, $sp, 4
 	sw $ra, 0($sp)
+    j draw_position
+
+draw_position: 
+    lw $a0, 8($s0)
+	lw $a1, 0($s0)
+	jal xy_offset
+		
+	add $t5, $t0, $v0 
 	
 draw_loop:
     add $t3, $t1, $t2
     lw $t4, 0($t3)
-    li $v0, 1
-    move $a0, $t4
-    syscall
+    beq $t4, -2, end_draw
     beq $t4, -1, end_draw
+
+    sw $t4, ($t5)
+    addi $t5, $t5, 4
+
     addi $t2, $t2, 4
     j draw_loop
 	
