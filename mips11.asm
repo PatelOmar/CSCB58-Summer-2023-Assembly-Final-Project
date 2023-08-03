@@ -984,7 +984,7 @@ enemy_exit_check_within_game_screen_down_continued:
 
 erase_boundary:
 	li $t0, BASE_ADDRESS
-	addi $sp, $sp, 4
+	addi $sp, $sp, -4
 	sw $ra, 0($sp)
 	
 	# Get Row Start
@@ -1037,7 +1037,7 @@ end_erase_boundary:
 print_boundary:
 	li $t0, BASE_ADDRESS
 	li $t1, WALL_COLOR
-	addi $sp, $sp, 4
+	addi $sp, $sp, -4
 	sw $ra, 0($sp)
 	
 	# Get Row Start
@@ -1092,7 +1092,7 @@ draw:
 	la $t1, ($s1)
     add $t2, $zero, $zero
     add $t6, $zero, $zero
-	addi $sp, $sp, 4
+	addi $sp, $sp, -4
 	sw $ra, 0($sp)
     j draw_position
 
@@ -1129,7 +1129,7 @@ end_draw:
 erase_draw:
 	li $t0, BASE_ADDRESS
     add $t6, $zero, $zero
-	addi $sp, $sp, 4
+	addi $sp, $sp, -4
 	sw $ra, 0($sp)
     lw $t9, 4($s0)
     j erase_draw_position
@@ -1169,7 +1169,7 @@ erase_end_draw:
 	jr $ra
 ## Draw Character
 #draw_character:
-#	addi $sp, $sp, -4
+#	addi $sp, $sp, 4
 #	sw $ra, 0($sp)		# Stores ra
 #	
 #	li $t0, BASE_ADDRESS
