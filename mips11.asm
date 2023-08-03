@@ -718,6 +718,32 @@ exit_check_within_game_screen_right:
 	j player_move_end
 
 player_move_end:
+
+check_finish_collision:
+	
+	lw $t1, 0($s0)
+	la $s1, FINISH_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, check_finish_collision_condition1
+	j player_move_end_continued
+check_finish_collision_condition1:
+	lw $t1, 4($s0)
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_finish_collision_condition2
+	j player_move_end_continued
+check_finish_collision_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, check_finish_collision_condition3
+	j player_move_end_continued
+check_finish_collision_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, end	
+    j player_move_end_continued
+    
+player_move_end_continued:
 	j player_move
 			
 					
