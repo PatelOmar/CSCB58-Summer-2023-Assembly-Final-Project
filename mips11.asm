@@ -1074,7 +1074,7 @@ end_print_boundary:
 
 draw:
 	li $t0, BASE_ADDRESS
-	la $t1, $s1
+	la $t1, ($s1)
     add $t2, $zero, $zero
 	addi $sp, $sp, 4
 	sw $ra, 0($sp)
