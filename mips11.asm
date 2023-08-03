@@ -1139,8 +1139,6 @@ erase_draw_position:
 
 erase_draw_end_position: 
     lw $a0, 12($s0)
-	lw $t7, 0($s0)
-    add $t7, $t7, $t6
     move $a1, $t7
 	jal xy_offset
 		
@@ -1148,6 +1146,7 @@ erase_draw_end_position:
 
 erase_draw_loop:
     bgt $t5, $t8, draw_update
+    bgt $t7, 4($s0), erase_end_draw
 
     sw $zero, ($t5)
     addi $t5, $t5, 4
