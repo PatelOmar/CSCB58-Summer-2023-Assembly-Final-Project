@@ -1077,13 +1077,20 @@ draw:
 	li $t0, BASE_ADDRESS
 	la $t1, ($s1)
     add $t2, $zero, $zero
+    add $t6, $zero, $zero
 	addi $sp, $sp, 4
 	sw $ra, 0($sp)
     j draw_position
 
+draw_update:
+    addi $t2, $t2, 4
+    addi $t6, $t6, 1
+
 draw_position: 
     lw $a0, 8($s0)
-	lw $a1, 0($s0)
+	lw $t7, 0($s0)
+    add $t7, $t7, $t6
+    lw $a1, $t7
 	jal xy_offset
 		
 	add $t5, $t0, $v0 
@@ -1092,7 +1099,7 @@ draw_loop:
     add $t3, $t1, $t2
     lw $t4, 0($t3)
     beq $t4, -2, end_draw
-    beq $t4, -1, end_draw
+    beq $t4, -1, draw_update
 
     sw $t4, ($t5)
     addi $t5, $t5, 4
