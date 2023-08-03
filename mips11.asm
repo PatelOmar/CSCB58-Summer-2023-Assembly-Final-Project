@@ -120,8 +120,8 @@ main:
 	# ------------------------------------
 	# Draw Character
 	#jal draw_character
-	la  $s0, CHARACTER_BOUNDARIES
-	jal print_boundary
+	#la  $s0, CHARACTER_BOUNDARIES
+	#jal print_boundary
 	
     la  $s0, CHARACTER_BOUNDARIES
     la  $s1, CHARACTER
@@ -170,7 +170,7 @@ player_move:
 	
 	
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	li $t9, 0xffff0000
 	lw $t8, 0($t9)
@@ -299,7 +299,8 @@ process_down_update:
 	
 exit_check_within_game_screen_down:	
 	#la  $s0, CHARACTER_BOUNDARIES
-	jal print_boundary
+    la  $s1, CHARACTER
+	jal draw
 	
 	li $v0, 32
 	li $a0, 400 # Wait one second (1000 milliseconds)
@@ -321,7 +322,7 @@ respond_to_a:
 	
 player_move_left:
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -447,7 +448,9 @@ process_left_update:
 	#syscall
 exit_check_within_game_screen_left:		
 	#la  $s0, CHARACTER_BOUNDARIES
-	jal print_boundary
+	la  $s1, CHARACTER
+	jal draw
+	
 	
 	#li $v0, 32
 	#li $a0, 1000 # Wait one second (1000 milliseconds)
@@ -459,7 +462,7 @@ respond_to_w:
 	
 player_move_up:
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -582,7 +585,8 @@ process_up_update:
 	
 exit_check_within_game_screen_up:	
 	#la  $s0, CHARACTER_BOUNDARIES
-	jal print_boundary
+	la  $s1, CHARACTER
+	jal draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -593,7 +597,7 @@ exit_check_within_game_screen_up:
 respond_to_d:
 player_move_right:
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -718,7 +722,8 @@ process_right_update:
 	#syscall
 exit_check_within_game_screen_right:		
 	#la  $s0, CHARACTER_BOUNDARIES
-	jal print_boundary
+	la  $s1, CHARACTER
+	jal draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -1112,6 +1117,49 @@ end_draw:
 	addi $sp, $sp, 4
 	jr $ra
 
+erase_draw:
+	li $t0, BASE_ADDRESS
+	la $t1, $zero
+    add $t6, $zero, $zero
+	addi $sp, $sp, 4
+	sw $ra, 0($sp)
+
+    j draw_position
+
+erase_draw_update:
+    addi $t6, $t6, 1
+
+erase_draw_position: 
+    lw $a0, 8($s0)
+	lw $t7, 0($s0)
+    add $t7, $t7, $t6
+    move $a1, $t7
+	jal xy_offset
+		
+	add $t5, $t0, $v0 
+
+erase_draw_end_position: 
+    lw $a0, 12($s0)
+	lw $t7, 0($s0)
+    add $t7, $t7, $t6
+    move $a1, $t7
+	jal xy_offset
+		
+	add $t8, $t0, $v0 
+
+erase_draw_loop:
+    bgt $t5, $t8, draw_update
+
+    sw $t4, ($t5)
+    addi $t5, $t5, 4
+
+
+    j draw_loop
+	
+erase_end_draw:
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	jr $ra
 ## Draw Character
 #draw_character:
 #	addi $sp, $sp, -4
