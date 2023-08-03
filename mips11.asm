@@ -477,7 +477,86 @@ check_within_game_screen_up_condition2:
 check_within_game_screen_up_condition3:
 	lw $t1, 12($s0)
 	bgt $t1, 59, exit_check_within_game_screen_up
+
+check_platform1_collision_up:
 	
+	lw $t1, 0($s0)
+	addi $t1, $t1, -3
+	la $s1, PLATFORM1_BOUNDARIES
+	lw $t2, 4($s1)
+
+	ble $t1, $t2, check_platform1_collision_up_condition1
+	j check_platform2_collision_up
+check_platform1_collision_up_condition1:
+	lw $t1, 4($s0)
+    addi $t1, $t1, -3
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform1_collision_up_condition2
+	j check_platform2_collision_up
+check_platform1_collision_up_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, check_platform1_collision_up_condition3
+	j check_platform2_collision_up
+check_platform1_collision_up_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, exit_check_within_game_screen_up
+	j check_platform2_collision_up
+	
+check_platform2_collision_up:
+	lw $t1, 0($s0)
+	addi $t1, $t1, -3
+	la $s1, PLATFORM2_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, check_platform2_collision_up_condition1
+	j check_platform3_collision_up
+check_platform2_collision_up_condition1:
+	lw $t1, 4($s0)
+    addi $t1, $t1, -3
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform2_collision_up_condition2
+	j check_platform3_collision_up
+check_platform2_collision_up_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, check_platform2_collision_up_condition3
+	j check_platform3_collision_up
+check_platform2_collision_up_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, exit_check_within_game_screen_up
+	j check_platform3_collision_up
+	
+
+check_platform3_collision_up:
+	
+	lw $t1, 0($s0)
+    addi $t1, $t1, -3
+	la $s1, PLATFORM3_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, check_platform3_collision_up_condition1
+	j process_up_update
+check_platform3_collision_up_condition1:
+	lw $t1, 4($s0)
+    addi $t1, $t1, -3
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform3_collision_up_condition2
+	j process_up_update
+check_platform3_collision_up_condition2:
+	lw $t1, 8($s0)
+	lw $t2, 12($s1)
+	ble $t1, $t2, check_platform3_collision_up_condition3
+	j process_up_update
+check_platform3_collision_up_condition3:
+	lw $t1, 12($s0)
+	lw $t2, 8($s1)
+	ble $t2, $t1, exit_check_within_game_screen_up
+	j process_up_update 	
+
+process_up_update:	
 	#li $v0, 4
 	#la $a0, newline
 	#syscall
@@ -532,8 +611,88 @@ check_within_game_screen_right_condition3:
 	lw $t1, 12($s0)
 	addi $t1, $t1, 3
 	bgt $t1, 59, exit_check_within_game_screen_right
+
+check_platform1_collision_right:
 	
+	lw $t1, 0($s0)
 	
+	la $s1, PLATFORM1_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, check_platform1_collision_right_condition1
+	j check_platform2_collision_right
+check_platform1_collision_right_condition1:
+	lw $t1, 4($s0)
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform1_collision_right_condition2
+	j check_platform2_collision_right
+check_platform1_collision_right_condition2:
+	lw $t1, 8($s0)
+	addi $t1, $t1, 3
+	lw $t2, 12($s1)
+	ble $t1, $t2, check_platform1_collision_right_condition3
+	j check_platform2_collision_right
+check_platform1_collision_right_condition3:
+	lw $t1, 12($s0)
+	addi $t1, $t1, 3
+	lw $t2, 8($s1)
+	ble $t2, $t1, exit_check_within_game_screen_right
+	j check_platform2_collision_right
+	
+check_platform2_collision_right:
+	lw $t1, 0($s0)
+	
+	la $s1, PLATFORM2_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, check_platform2_collision_right_condition1
+	j check_platform3_collision_right
+check_platform2_collision_right_condition1:
+	lw $t1, 4($s0)
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform2_collision_right_condition2
+	j check_platform3_collision_right
+check_platform2_collision_right_condition2:
+	lw $t1, 8($s0)
+	addi $t1, $t1, 3
+	lw $t2, 12($s1)
+	ble $t1, $t2, check_platform2_collision_right_condition3
+	j check_platform3_collision_right
+check_platform2_collision_right_condition3:
+	lw $t1, 12($s0)
+	addi $t1, $t1, 3
+	lw $t2, 8($s1)
+	ble $t2, $t1, exit_check_within_game_screen_right
+	j check_platform3_collision_right
+	
+
+check_platform3_collision_right:
+	
+	lw $t1, 0($s0)
+	la $s1, PLATFORM3_BOUNDARIES
+	lw $t2, 4($s1)
+	
+	ble $t1, $t2, check_platform3_collision_right_condition1
+	j process_right_update
+check_platform3_collision_right_condition1:
+	lw $t1, 4($s0)
+	lw $t2, 0($s1)
+	ble $t2, $t1, check_platform3_collision_right_condition2
+	j process_right_update
+check_platform3_collision_right_condition2:
+	lw $t1, 8($s0)
+	addi $t1, $t1, -3
+	lw $t2, 12($s1)
+	ble $t1, $t2, check_platform3_collision_right_condition3
+	j process_right_update
+check_platform3_collision_right_condition3:
+	lw $t1, 12($s0)
+	addi $t1, $t1, -3
+	lw $t2, 8($s1)
+	ble $t2, $t1, exit_check_within_game_screen_right
+	j process_right_update 	
+
+process_right_update:	
 	# Get Column Start
 	# 8($s0)
 	# Get Column End
