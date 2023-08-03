@@ -300,7 +300,7 @@ process_down_update:
 exit_check_within_game_screen_down:	
 	#la  $s0, CHARACTER_BOUNDARIES
     la  $s1, CHARACTER
-	jal print_boundary
+	jal draw
 	
 	li $v0, 32
 	li $a0, 400 # Wait one second (1000 milliseconds)
@@ -322,7 +322,7 @@ respond_to_a:
 	
 player_move_left:
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -449,7 +449,7 @@ process_left_update:
 exit_check_within_game_screen_left:		
 	#la  $s0, CHARACTER_BOUNDARIES
 	la  $s1, CHARACTER
-	jal print_boundary
+	jal draw
 	
 	
 	#li $v0, 32
@@ -462,7 +462,7 @@ respond_to_w:
 	
 player_move_up:
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -586,7 +586,7 @@ process_up_update:
 exit_check_within_game_screen_up:	
 	#la  $s0, CHARACTER_BOUNDARIES
 	la  $s1, CHARACTER
-	jal print_boundary
+	jal draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -597,7 +597,7 @@ exit_check_within_game_screen_up:
 respond_to_d:
 player_move_right:
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_boundary
+	jal erase_draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
@@ -723,7 +723,7 @@ process_right_update:
 exit_check_within_game_screen_right:		
 	#la  $s0, CHARACTER_BOUNDARIES
 	la  $s1, CHARACTER
-	jal print_boundary
+	jal draw
 	
 	#li $v0, 32
 	#li $a0, 500 # Wait one second (1000 milliseconds)
