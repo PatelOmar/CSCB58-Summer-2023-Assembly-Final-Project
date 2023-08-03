@@ -300,7 +300,7 @@ process_down_update:
 exit_check_within_game_screen_down:	
 	#la  $s0, CHARACTER_BOUNDARIES
     la  $s1, CHARACTER
-	jal draw
+	jal print_boundary
 	
 	li $v0, 32
 	li $a0, 400 # Wait one second (1000 milliseconds)
