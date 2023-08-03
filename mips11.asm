@@ -170,7 +170,7 @@ player_move:
 	
 	
 	la  $s0, CHARACTER_BOUNDARIES
-	jal erase_draw
+	jal erase_boundary
 	
 	li $t9, 0xffff0000
 	lw $t8, 0($t9)
