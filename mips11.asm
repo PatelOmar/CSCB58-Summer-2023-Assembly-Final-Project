@@ -1090,7 +1090,7 @@ draw_position:
     lw $a0, 8($s0)
 	lw $t7, 0($s0)
     add $t7, $t7, $t6
-    lw $a1, $t7
+    lw $a1, ($t7)
 	jal xy_offset
 		
 	add $t5, $t0, $v0 
