@@ -156,7 +156,12 @@ main:
 	#addi $sp, $sp, 4
 	#sw $t1, 0($sp)
 	jal print_boundary
+reset_happened:
+	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
+	beq $t2, 0x70, respond_to_a # ASCII code of 'a' is 0x61 or 97 in decimal
 	
+	j reset_game
+
 	# ------------------------------------
 	# Player Move
 player_move:
@@ -773,17 +778,17 @@ enemy_check_within_game_screen_down:
 	# 12($s0)
 	lw $t1, 0($s0)
 	addi $t1, $t1, 1
-	ble $t1, 4, enemy_exit_check_within_game_screen_down
+	ble $t1, 4, reset_enemy
 enemy_check_within_game_screen_down_condition1:
 	lw $t1, 4($s0)
 	addi $t1, $t1, 1
-	bgt $t1, 104, enemy_exit_check_within_game_screen_down
+	bgt $t1, 104, reset_enemy
 enemy_check_within_game_screen_down_condition2:
 	lw $t1, 8($s0)
-	ble $t1, 4, enemy_exit_check_within_game_screen_down
+	ble $t1, 4, reset_enemy
 enemy_check_within_game_screen_down_condition3:
 	lw $t1, 12($s0)
-	bgt $t1, 59, enemy_exit_check_within_game_screen_down
+	bgt $t1, 59, reset_enemy
 	
 	#li $v0, 4
 	#la $a0, newline
@@ -812,7 +817,7 @@ enemy_check_platform1_collision_down_condition2:
 enemy_check_platform1_collision_down_condition3:
 	lw $t1, 12($s0)
 	lw $t2, 8($s1)
-	ble $t2, $t1, enemy_exit_check_within_game_screen_down
+	ble $t2, $t1, reset_enemy
 	j enemy_check_platform2_collision_down
 	
 enemy_check_platform2_collision_down:
@@ -838,7 +843,7 @@ enemy_check_platform2_collision_down_condition2:
 enemy_check_platform2_collision_down_condition3:
 	lw $t1, 12($s0)
 	lw $t2, 8($s1)
-	ble $t2, $t1, enemy_exit_check_within_game_screen_down
+	ble $t2, $t1, reset_enemy
 	j enemy_check_platform3_collision_down
 	
 
@@ -866,7 +871,7 @@ enemy_check_platform3_collision_down_condition2:
 enemy_check_platform3_collision_down_condition3:
 	lw $t1, 12($s0)
 	lw $t2, 8($s1)
-	ble $t2, $t1, enemy_exit_check_within_game_screen_down
+	ble $t2, $t1, reset_enemy
 	j enemy_check_finish_collision
 
 enemy_check_finish_collision:
@@ -890,7 +895,7 @@ enemy_check_finish_collision_condition2:
 enemy_check_finish_collision_condition3:
 	lw $t1, 12($s0)
 	lw $t2, 8($s1)
-	ble $t2, $t1, end	
+	ble $t2, $t1, reset_enemy
     j enemy_process_down_update 
 
 enemy_process_down_update:
@@ -934,7 +939,7 @@ enemy_check_character_collision_condition3:
     j enemy_exit_check_within_game_screen_down_continued 
 enemy_exit_check_within_game_screen_down_continued:
 
-	j player_move
+	j reset_happened
 			
 					
 	# ------------------------------------
@@ -1309,9 +1314,61 @@ continue_pixel_position:
 	sw $t6, 0($sp)
 	jr $ra
 
-			
-	
-	
+reset_enemy:
+    # Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+    #ENEMY_BOUNDARIES: .word 6, 6, 23, 23
+	la  $s0, ENEMY_BOUNDARIES
+    li $t0, 6
+    sw $t0, 0($s0)
+    li $t0, 6
+    sw $t0, 4($s0)
+    li $t0, 23
+    sw $t0, 8($s0)
+    li $t0, 23
+    sw $t0, 12($s0)
+
+    j reset_happened
+
+reset_game:
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+
+    #CHARACTER_BOUNDARIES: .word 97, 104, 5, 10
+	la  $s0, CHARACTER_BOUNDARIES
+    li $t0, 97
+    sw $t0, 0($s0)
+    li $t0, 104
+    sw $t0, 4($s0)
+    li $t0, 5
+    sw $t0, 8($s0)
+    li $t0, 10
+    sw $t0, 12($s0)
+
+    #ENEMY_BOUNDARIES: .word 6, 6, 23, 23
+	la  $s0, ENEMY_BOUNDARIES
+    li $t0, 6
+    sw $t0, 0($s0)
+    li $t0, 6
+    sw $t0, 4($s0)
+    li $t0, 23
+    sw $t0, 8($s0)
+    li $t0, 23
+    sw $t0, 12($s0)
+
+    j main
 
 end:	li $v0, 10
 	syscall
