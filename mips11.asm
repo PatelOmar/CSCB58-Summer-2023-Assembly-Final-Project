@@ -1459,7 +1459,7 @@ reset_enemy:
 
     la  $s0, ENEMY_BULLETS
     move $t0, $a0
-    subi $t0, $t0, 3
+    addi $t0, $t0, 3
     sw $t0, 8($s0)
     sw $t0, 12($s0)
 
