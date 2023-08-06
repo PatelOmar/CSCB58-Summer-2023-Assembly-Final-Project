@@ -893,11 +893,11 @@ enemy_check_within_game_screen_down:
 	# Get Column End
 	# 12($s0)
 	lw $t1, 0($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	ble $t1, 4, reset_enemy
 enemy_check_within_game_screen_down_condition1:
 	lw $t1, 4($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	bgt $t1, 104, reset_enemy
 enemy_check_within_game_screen_down_condition2:
 	lw $t1, 8($s0)
@@ -912,7 +912,7 @@ enemy_check_within_game_screen_down_condition3:
 enemy_check_platform1_collision_down:
 	
 	lw $t1, 0($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	
 	la $s1, PLATFORM1_BOUNDARIES
 	lw $t2, 4($s1)
@@ -921,7 +921,7 @@ enemy_check_platform1_collision_down:
 	j enemy_check_platform2_collision_down
 enemy_check_platform1_collision_down_condition1:
 	lw $t1, 4($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	lw $t2, 0($s1)
 	ble $t2, $t1, enemy_check_platform1_collision_down_condition2
 	j enemy_check_platform2_collision_down
@@ -938,7 +938,7 @@ enemy_check_platform1_collision_down_condition3:
 	
 enemy_check_platform2_collision_down:
 	lw $t1, 0($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	
 	la $s1, PLATFORM2_BOUNDARIES
 	lw $t2, 4($s1)
@@ -947,7 +947,7 @@ enemy_check_platform2_collision_down:
 	j enemy_check_platform3_collision_down
 enemy_check_platform2_collision_down_condition1:
 	lw $t1, 4($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	lw $t2, 0($s1)
 	ble $t2, $t1, enemy_check_platform2_collision_down_condition2
 	j enemy_check_platform3_collision_down
@@ -966,7 +966,7 @@ enemy_check_platform2_collision_down_condition3:
 enemy_check_platform3_collision_down:
 	
 	lw $t1, 0($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	
 	la $s1, PLATFORM3_BOUNDARIES
 	lw $t2, 4($s1)
@@ -975,7 +975,7 @@ enemy_check_platform3_collision_down:
 	j enemy_check_finish_collision
 enemy_check_platform3_collision_down_condition1:
 	lw $t1, 4($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	lw $t2, 0($s1)
 	ble $t2, $t1, enemy_check_platform3_collision_down_condition2
 	j enemy_check_finish_collision
@@ -1020,10 +1020,10 @@ enemy_process_down_update:
 	# Get Row End
 	# 4($s0)
 	lw $t1, 0($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	sw $t1, 0($s0)
 	lw $t1, 4($s0)
-	addi $t1, $t1, 1
+	addi $t1, $t1, 3
 	sw $t1, 4($s0)	
 	
 enemy_exit_check_within_game_screen_down:	
