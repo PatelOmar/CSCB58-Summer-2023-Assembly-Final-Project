@@ -1457,15 +1457,18 @@ reset_enemy:
 
     jal draw
 
+    move $t0, $a0
+    subi $t0, $t0, 3
+    sw $t0, 8($s0)
+    sw $t0, 12($s0)
+    
     #ENEMY_BULLETS: .word 12, 12, 23, 23
 	la  $s0, ENEMY_BULLETS
     li $t0, 12
     sw $t0, 0($s0)
     li $t0, 12
     sw $t0, 4($s0)
-    subi $t0, $t0, 3
-    sw $t0, 8($s0)
-    sw $t0, 12($s0)
+  
 
     j check_reset
 
