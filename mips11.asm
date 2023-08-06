@@ -117,6 +117,7 @@ main:
 	# ------------------------------------
 	# Initialize Boundaries
 	# 
+    li $s2, 1
 	# ------------------------------------
 	# Draw Character
 	#jal draw_character
