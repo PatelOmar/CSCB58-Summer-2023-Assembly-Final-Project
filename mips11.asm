@@ -176,7 +176,7 @@ reset_happened:
     # ------------------------------------
     #
     la  $s0, PLATFORM1_BOUNDARIES
-    la  $s1, PLATFORM1
+    #la  $s1, PLATFORM1
 	jal erase_boundary
 
 platform1_check_within_game_screen_horizontal:
@@ -216,6 +216,9 @@ platform1_process_down_update:
 	sw $t1, 12($s0)	
 	
 platform1_exit_check_within_game_screen_horizontal:	
+    li $v0, 32
+	li $a0, 500 # Wait one second (1000 milliseconds)
+	syscall
 	jal print_boundary
 
 	# ------------------------------------
@@ -1407,7 +1410,7 @@ reset_platform1:
 reset_platform1_condition:
     li $s2, 1
 reset_platform1_resume:
-    j check_reset
+    j player_move
 
 reset_game:
 	# Get Row Start
