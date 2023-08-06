@@ -1472,11 +1472,11 @@ reset_platform2:
 	# 8($s0)
 	# Get Column End
 	# 12($s0)
-	ble $s2, 0, reset_platform2_condition
-    li $s2, -1
+	ble $s3, 0, reset_platform2_condition
+    li $s3, -1
     j reset_platform2_resume
 reset_platform2_condition:
-    li $s2, 1
+    li $s3, 1
 reset_platform2_resume:
     j player_move
 
