@@ -1445,6 +1445,9 @@ reset_enemy:
     li $a1, 41
     syscall
 
+    la  $s0, ENEMY_BOUNDARIES
+    la  $s1, ENEMY
+    jal erase_draw
     #ENEMY_BOUNDARIES: .word 6, 11, 20, 26
 	la  $s0, ENEMY_BOUNDARIES
     li $t0, 6
@@ -1456,6 +1459,8 @@ reset_enemy:
     addi $t0, $t0, 6
     sw $t0, 12($s0)
 
+    jal draw
+    
     #ENEMY_BULLETS: .word 12, 12, 23, 23
 	la  $s0, ENEMY_BULLETS
     li $t0, 12
@@ -1465,11 +1470,6 @@ reset_enemy:
     subi $t0, $t0, 3
     sw $t0, 8($s0)
     sw $t0, 12($s0)
-
-    la  $s0, ENEMY_BOUNDARIES
-    la  $s1, ENEMY
-    jal erase_draw
-	jal draw
 
     j check_reset
 
