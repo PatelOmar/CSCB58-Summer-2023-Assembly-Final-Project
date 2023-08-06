@@ -132,7 +132,7 @@ main:
 	#jal print_boundary
 
 	la  $s0, ENEMY_BOUNDARIES
-    la  $s1, ENEMY
+    #la  $s1, ENEMY
 	jal print_boundary
 
     la  $s0, CHARACTER_BOUNDARIES
