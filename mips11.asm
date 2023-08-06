@@ -1466,6 +1466,11 @@ reset_enemy:
     sw $t0, 8($s0)
     sw $t0, 12($s0)
 
+    la  $s0, ENEMY_BOUNDARIES
+    la  $s1, ENEMY
+    jal erase_draw
+	jal draw
+
     j check_reset
 
 reset_platform1:
