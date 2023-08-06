@@ -89,7 +89,7 @@ FINISH_BOUNDARIES: .word 45, 51, 8, 12
 ENEMY_BULLETS: .word 6, 6, 23, 23
 
 # Enemy
-#FINISH_BOUNDARIES: .word 24596, 24600, 24604, 24608, 24612, 24616, 24872, 25128, 25384, 25640, 25896, 26152, 26388, 26392, 26396, 26400, 26404, 26408, 24852, 25108, 25364, 25620, 25876, 26132
+ENEMY: .word 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 1, 1, 0, 1, 1, 1, -2
 ENEMY_BOUNDARIES: .word 6, 11, 20, 26
 
 newline: .asciiz "test\n"
@@ -132,7 +132,8 @@ main:
 	#jal print_boundary
 
 	la  $s0, ENEMY_BOUNDARIES
-	jal print_boundary
+    la  $s1, ENEMY
+	jal draw
 
     la  $s0, CHARACTER_BOUNDARIES
     la  $s1, CHARACTER
