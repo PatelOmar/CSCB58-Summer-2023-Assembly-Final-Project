@@ -1455,10 +1455,12 @@ reset_enemy:
     addi $t0, $t0, 6
     sw $t0, 12($s0)
 
+
     jal draw
 
     la  $s0, ENEMY_BULLETS
-    move $t0, $a0
+    la $s1, ENEMY_BOUNDARIES
+    lw $t0, 8($s1)
     addi $t0, $t0, 3
     sw $t0, 8($s0)
     sw $t0, 12($s0)
