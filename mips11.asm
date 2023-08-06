@@ -86,10 +86,10 @@ FINISH_BOUNDARIES: .word 45, 51, 8, 12
 .eqv FINSIH_BOUNDARIES_LEN 4
 
 # Enemy
-ENEMY_BULLETS: .word 6, 6, 23, 23
+ENEMY_BULLETS: .word 12, 12, 23, 23
 
 # Enemy
-ENEMY: .word 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -2
+ENEMY: .word 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, 0xfffafafa, -1, 0xff000000, 0xff000000, 0xff000000, 0xfffafafa, 0xff000000, 0xff000000, 0xff000000, -2
 ENEMY_BOUNDARIES: .word 6, 11, 20, 26
 
 newline: .asciiz "test\n"
@@ -1439,15 +1439,31 @@ reset_enemy:
 	# 8($s0)
 	# Get Column End
 	# 12($s0)
-    #ENEMY_BULLETS: .word 6, 6, 23, 23
-	la  $s0, ENEMY_BULLETS
+
+    li $v0, 42
+    li $a0, 6
+    li $a1, 41
+    syscall
+
+    #ENEMY_BOUNDARIES: .word 6, 11, 20, 26
+	la  $s0, ENEMY_BOUNDARIES
     li $t0, 6
     sw $t0, 0($s0)
-    li $t0, 6
+    li $t0, 11
     sw $t0, 4($s0)
-    li $t0, 23
+    move $t0, $a0
     sw $t0, 8($s0)
-    li $t0, 23
+    addi $t0, $t0, 6
+    sw $t0, 12($s0)
+
+    #ENEMY_BULLETS: .word 12, 12, 23, 23
+	la  $s0, ENEMY_BULLETS
+    li $t0, 12
+    sw $t0, 0($s0)
+    li $t0, 12
+    sw $t0, 4($s0)
+    subi $t0, $t0, 3
+    sw $t0, 8($s0)
     sw $t0, 12($s0)
 
     j check_reset
