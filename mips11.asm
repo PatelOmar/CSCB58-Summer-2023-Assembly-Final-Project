@@ -210,10 +210,10 @@ platform1_process_down_update:
 	# 4($s0)
 	lw $t1, 8($s0)
 	add $t1, $t1, $s2
-	sw $t1, 0($s0)
+	sw $t1, 8($s0)
 	lw $t1, 12($s0)
 	add $t1, $t1, $s2
-	sw $t1, 4($s0)	
+	sw $t1, 12($s0)	
 	
 platform1_exit_check_within_game_screen_horizontal:	
 	jal print_boundary
