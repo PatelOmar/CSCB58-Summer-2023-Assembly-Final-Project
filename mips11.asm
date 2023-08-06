@@ -168,17 +168,17 @@ check_reset:
     li $t9, 0xffff0000
 	lw $t8, 0($t9)
     beq $t8, 1, reset_happened
-    j platform1_check_within_game_screen_horizontal
+    j platform1_move
 reset_happened:
 	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
 	beq $t2, 0x70, reset_game # ASCII code of 'a' is 0x61 or 97 in decimal
 
     # ------------------------------------
     #
-    la  $s0, PLATFORM1_BOUNDARIES
+platform1_move:
+     la  $s0, PLATFORM1_BOUNDARIES
     #la  $s1, PLATFORM1
 	jal erase_boundary
-
 platform1_check_within_game_screen_horizontal:
 	# Get Row Start
 	# 0($s0)
