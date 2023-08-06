@@ -115,9 +115,14 @@ main:
 	jal paint_background
 	jal paint_walls
 	# ------------------------------------
-	# Initialize Boundaries
+	# Initialize Game
 	# 
-    li $s2, 1
+    li $s2, 2
+    li $s3, 2
+    
+    li $s4, 1
+
+
 	# ------------------------------------
 	# Draw Character
 	#jal draw_character
@@ -216,6 +221,52 @@ platform1_process_down_update:
 	sw $t1, 12($s0)	
 	
 platform1_exit_check_within_game_screen_horizontal:	
+	jal draw
+    li $v0, 32
+	li $a0, 100 # Wait one second (1000 milliseconds)
+	syscall
+
+platform2_move:
+    la  $s0, PLATFORM2_BOUNDARIES
+    la  $s1, PLATFORM2
+	jal erase_draw
+platform2_check_within_game_screen_horizontal:
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 0($s0)
+	ble $t1, 4, reset_platform2
+platform2_check_within_game_screen_horizontal_condition1:
+	lw $t1, 4($s0)
+	bgt $t1, 104, reset_platform2
+platform2_check_within_game_screen_horizontal_condition2:
+	lw $t1, 8($s0)
+	add $t1, $t1, $s3
+	ble $t1, 4, reset_platform2
+platform2_check_within_game_screen_horizontal_condition3:
+	lw $t1, 12($s0)
+	add $t1, $t1, $s3
+	bgt $t1, 59, reset_platform2
+	 
+
+platform2_process_down_update:
+	# Get Column Start
+	# 0($s0)
+	# Get Column End
+	# 4($s0)
+	lw $t1, 8($s0)
+	add $t1, $t1, $s3
+	sw $t1, 8($s0)
+	lw $t1, 12($s0)
+	add $t1, $t1, $s3
+	sw $t1, 12($s0)	
+	
+platform2_exit_check_within_game_screen_horizontal:	
 	jal draw
     li $v0, 32
 	li $a0, 100 # Wait one second (1000 milliseconds)
@@ -1410,6 +1461,23 @@ reset_platform1:
 reset_platform1_condition:
     li $s2, 1
 reset_platform1_resume:
+    j player_move
+
+reset_platform2:
+    # Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	ble $s2, 0, reset_platform2_condition
+    li $s2, -1
+    j reset_platform2_resume
+reset_platform2_condition:
+    li $s2, 1
+reset_platform2_resume:
     j player_move
 
 reset_game:
