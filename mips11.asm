@@ -161,6 +161,8 @@ main:
 	#sw $t1, 0($sp)
 	jal draw
     
+    # ------------------------------------
+    #
 check_reset:
     li $t9, 0xffff0000
 	lw $t8, 0($t9)
@@ -169,6 +171,51 @@ check_reset:
 reset_happened:
 	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
 	beq $t2, 0x70, reset_game # ASCII code of 'a' is 0x61 or 97 in decimal
+
+    # ------------------------------------
+    #
+    la  $s0, PLATFORM1_BOUNDARIES
+    la  $s1, PLATFORM1
+	jal erase_boundary
+
+platform1_check_within_game_screen_horizontal:
+	# Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	lw $t1, 0($s0)
+	ble $t1, 4, reset_platform
+platform1_check_within_game_screen_horizontal_condition1:
+	lw $t1, 4($s0)
+	bgt $t1, 104, reset_platform
+platform1_check_within_game_screen_horizontal_condition2:
+	lw $t1, 8($s0)
+	add $t1, $t1, $s2
+	ble $t1, 4, reset_platform
+platform1_check_within_game_screen_horizontal_condition3:
+	lw $t1, 12($s0)
+	add $t1, $t1, $s2
+	bgt $t1, 59, reset_platform
+	 
+
+platform1_process_down_update:
+	# Get Column Start
+	# 0($s0)
+	# Get Column End
+	# 4($s0)
+	lw $t1, 8($s0)
+	add $t1, $t1, $s2
+	sw $t1, 0($s0)
+	lw $t1, 12($s0)
+	add $t1, $t1, $s2
+	sw $t1, 4($s0)	
+	
+platform1_exit_check_within_game_screen_horizontal:	
+	jal print_boundary
 
 	# ------------------------------------
 	# Player Move
@@ -1342,6 +1389,23 @@ reset_enemy:
     li $t0, 23
     sw $t0, 12($s0)
 
+    j check_reset
+
+reset_platform1:
+    # Get Row Start
+	# 0($s0)
+	# Get Row End
+	# 4($s0)
+	# Get Column Start 
+	# 8($s0)
+	# Get Column End
+	# 12($s0)
+	ble $s2, 0, reset_platform1_condition
+    li $s2, -1
+    j reset_platform1_resume
+reset_platform1_condition:
+    li $s2, 1
+reset_platform1_resume:
     j check_reset
 
 reset_game:
