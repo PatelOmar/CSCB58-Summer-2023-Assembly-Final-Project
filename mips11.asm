@@ -1445,7 +1445,7 @@ reset_enemy:
     jal erase_draw
 
     li $v0, 42
-    li $a0, 6
+    li $a0, 10
     li $a1, 41
     syscall
 
