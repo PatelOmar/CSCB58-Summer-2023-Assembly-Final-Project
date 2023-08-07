@@ -1020,7 +1020,7 @@ check_within_game_screen_up:
 	# 12($s0)
 	lw $t1, 0($s0)
 	addi $t1, $t1, -3
-	ble $t1, 4, exit_check_within_game_screen_up
+	ble $t1, 14, exit_check_within_game_screen_up
 check_within_game_screen_up_condition1:
 	lw $t1, 4($s0)
 	addi $t1, $t1, -3
