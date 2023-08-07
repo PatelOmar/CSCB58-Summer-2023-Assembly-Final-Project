@@ -618,7 +618,7 @@ platform1_check_within_game_screen_horizontal_condition2:
 platform1_check_within_game_screen_horizontal_condition3:
 	lw $t1, 12($s0)
 	add $t1, $t1, $s2
-	bgt $t1, 59, reset_platform1
+	bgt $t1, 58, reset_platform1
 	 
 
 platform1_process_down_update:
@@ -664,7 +664,7 @@ platform2_check_within_game_screen_horizontal_condition2:
 platform2_check_within_game_screen_horizontal_condition3:
 	lw $t1, 12($s0)
 	add $t1, $t1, $s3
-	bgt $t1, 59, reset_platform2
+	bgt $t1, 58, reset_platform2
 	 
 
 platform2_process_down_update:
