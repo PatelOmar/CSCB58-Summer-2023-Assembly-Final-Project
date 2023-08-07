@@ -323,21 +323,11 @@ main_reset_start_point:
 	#addi $sp, $sp, 4
 	#sw $t1, 0($sp)
 	jal draw
-    
-    # ------------------------------------
-    #
-check_reset:
-    li $t9, 0xffff0000
-	lw $t8, 0($t9)
-    beq $t8, 1, reset_happened
-	beq $s4, 1, player_move
-    j platform1_move
-reset_happened:
-	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
-	beq $t2, 0x70, reset_game # ASCII code of 'a' is 0x61 or 97 in decimal
 
-    # ------------------------------------
-    #
+game_start:
+	beq $s4, 2, platform1_move
+	j check_reset
+
 platform1_move:
     la  $s0, PLATFORM1_BOUNDARIES
     la  $s1, PLATFORM1
@@ -429,6 +419,20 @@ platform2_exit_check_within_game_screen_horizontal:
     li $v0, 32
 	li $a0, 100 # Wait one second (1000 milliseconds)
 	syscall
+
+    # ------------------------------------
+    #
+check_reset:
+    li $t9, 0xffff0000
+	lw $t8, 0($t9)
+    beq $t8, 1, reset_happened
+	j player_move
+reset_happened:
+	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
+	beq $t2, 0x70, reset_game # ASCII code of 'a' is 0x61 or 97 in decimal
+
+    # ------------------------------------
+    #
 
 	# ------------------------------------
 	# Player Move
@@ -1207,7 +1211,7 @@ enemy_check_character_collision_condition3:
     j enemy_exit_check_within_game_screen_down_continued 
 enemy_exit_check_within_game_screen_down_continued:
 
-	j check_reset
+	j game_start
 			
 					
 	# ------------------------------------
@@ -1627,7 +1631,7 @@ reset_enemy:
     sw $t0, 4($s0)
   
 
-    j check_reset
+    j game_start
 
 reset_platform1:
     # Get Row Start
@@ -1674,16 +1678,16 @@ remove_heart1:
 remove_heart3:
 	la  $s0, HEALTH3_BOUNDARIES
 	jal erase_draw
-	j check_reset
+	j game_start
 remove_heart2:
 	la  $s0, HEALTH2_BOUNDARIES
 	jal erase_draw
-	j check_reset
+	j game_start
     
 check_finish:
 	beq $s4, 2, win_game
-	addi $s4, $s4,1
-	j check_reset
+	addi $s4, $s4, 1
+	j game_start
 
 lose_game:
 	j end
