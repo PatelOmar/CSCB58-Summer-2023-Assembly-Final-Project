@@ -1664,16 +1664,40 @@ reset_platform2_resume:
     j player_move
 
 player_health:
-   #subi $s5, $s5, 1
-    #beq $s5, 2, remove_heart3
+	la  $s0, HEALTH1_BOUNDARIES
+	la  $s1, HEALTH
+	jal draw
+	la  $s0, HEALTH2_BOUNDARIES
+	jal draw
+	la  $s0, HEALTH3_BOUNDARIES
+	jal draw
 
-    #beq $s5, 0, lose_game
-    j end
+   	subi $s5, $s5, 1
+    beq $s5, 2, remove_heart3
+	beq $s5, 1, remove_heart2
+remove_heart1:
+	la  $s0, HEALTH1_BOUNDARIES
+	jal erase_draw
+	j lose_game
+remove_heart3:
+	la  $s0, HEALTH3_BOUNDARIES
+	jal erase_draw
+	j check_reset
+remove_heart3:
+	la  $s0, HEALTH2_BOUNDARIES
+	jal erase_draw
+	j check_reset
     
 check_finish:
+	beq $s4, 2, win_game
+	addi $s4, $s4,1
+	j check_reset
 
+lose_game:
 	j end
-
+win_game:
+	j end
+	
 reset_game:
 	# Get Row Start
 	# 0($s0)
