@@ -3,18 +3,18 @@
 # CSCB58 Winter 2022 Assembly Final Project
 # University of Toronto, Scarborough
 #
-# Student: Name, Student Number, UTorID, official email
+# Student: Omar Patel, 1005270939, Patelom2, o.patel@mail.utoronto.ca
 #
 # Bitmap Display Configuration:
 # - Unit width in pixels: 4 (update this as needed)
 # - Unit height in pixels: 4 (update this as needed)
 # - Display width in pixels: 256 (update this as needed)
-# - Display height in pixels: 256 (update this as needed)
+# - Display height in pixels: 512 (update this as needed)
 # - Base Address for Display: 0x10008000 ($gp)
 #
 # Which milestones have been reached in this submission?
 # (See the assignment handout for descriptions of the milestones)
-# - Milestone 1/2/3 (choose the one the applies)
+# - Milestone 3 
 #
 # Which approved features have been implemented for milestone 3?
 # (See the assignment handout for the list of additional features)
@@ -27,7 +27,7 @@
 # - (insert YouTube / MyMedia / other URL here). Make sure we can view it!
 #
 # Are you OK with us sharing the video with people outside course staff?
-# - yes / no / yes, and please share this project github link as well!
+# - No
 #
 # Any additional information that the TA needs to know:
 # - (write here, if any)
@@ -2006,11 +2006,11 @@ reset_game:
     li $t0, 26
     sw $t0, 12($s0)
 
-    #ENEMY_BULLETS: .word 6, 6, 23, 23
+    #ENEMY_BULLETS: .word 12, 12, 23, 23
 	la  $s0, ENEMY_BULLETS
-    li $t0, 6
+    li $t0, 12
     sw $t0, 0($s0)
-    li $t0, 6
+    li $t0, 12
     sw $t0, 4($s0)
     li $t0, 23
     sw $t0, 8($s0)
