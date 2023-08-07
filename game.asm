@@ -30,8 +30,9 @@
 # - No
 #
 # Any additional information that the TA needs to know:
-# - (write here, if any)
-#
+# - GITHUB: https://github.com/PatelOmar/CSCB58-Summer-2023-Assembly-Final-Project
+# - Controls: W - up, D - right, A - left
+# - If running game on a virtual machine, use 5 GB Memory, 4-5 Processors
 #####################################################################
 
 # Defined Constants
