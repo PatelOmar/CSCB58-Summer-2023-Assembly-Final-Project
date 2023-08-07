@@ -18,10 +18,16 @@
 #
 # Which approved features have been implemented for milestone 3?
 # (See the assignment handout for the list of additional features)
-# 1. (fill in the feature, if any)
-# 2. (fill in the feature, if any)
-# 3. (fill in the feature, if any)
-# ... (add more if necessary)
+# 1. Health [2 marks] - 3 lives
+# 2. Fail Condition [1 marks] - If player loses all lives they lose the game
+# 3. Win Condition [1 marks] - If player reaches portal on level 2 they win the game
+# 4. Moving Objects [2 marks] - Enemy moves at the top of the screen
+# 5. Moving Platforms [2 marks] - Platforms move on level 2
+# 6. Different Levels [2 marks] - There are 2 levels in the game
+# 7. Enemies shoot [2 marks] - Enemy at the top of the screen shoots at you
+# 8. Start Menu [2 marks] - Start Menu at the beginning of the game as well as Losing and Winning Screen
+# 9. Gimmicks and features [0-3 marks] - Player can get stuck if the platform passes over them
+# 
 #
 # Link to video demonstration for final submission:
 # - https://youtu.be/wcE9w5vn2ek
