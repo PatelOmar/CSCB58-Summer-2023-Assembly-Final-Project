@@ -251,14 +251,6 @@ main:
 	li $a0, 5000 # Wait one second (1000 milliseconds)
 	syscall	
 
-
-	# ------------------------------------
-	# Clear screen
-	jal clear
-	# ------------------------------------
-	# Draw layout 
-	jal paint_background
-	jal paint_walls
 	# ------------------------------------
 	# Initialize Game
 	# 
@@ -269,6 +261,14 @@ main:
     li $s5, 3 # Player health
 
 main_reset_start_point:
+	# ------------------------------------
+	# Clear screen
+	jal clear
+	# ------------------------------------
+	# Draw layout 
+	jal paint_background
+	jal paint_walls
+	
 	# ------------------------------------
 	# Draw Character
 	#jal draw_character
