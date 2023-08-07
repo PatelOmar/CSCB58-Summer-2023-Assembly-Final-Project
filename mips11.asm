@@ -327,6 +327,7 @@ check_reset:
     li $t9, 0xffff0000
 	lw $t8, 0($t9)
     beq $t8, 1, reset_happened
+	beq $s4, 1, j player_move
     j platform1_move
 reset_happened:
 	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
@@ -1023,7 +1024,7 @@ check_finish_collision_condition2:
 check_finish_collision_condition3:
 	lw $t1, 12($s0)
 	lw $t2, 8($s1)
-	ble $t2, $t1, end	
+	ble $t2, $t1, check_finish	
     j player_move_end_continued
 
 player_move_end_continued:
@@ -1666,7 +1667,10 @@ player_health:
     #beq $s5, 0, lose_game
     j end
     
-    
+check_finish:
+
+	j end
+	
 reset_game:
 	# Get Row Start
 	# 0($s0)
