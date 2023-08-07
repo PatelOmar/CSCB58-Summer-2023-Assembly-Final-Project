@@ -250,6 +250,8 @@ main:
 	li $v0, 32
 	li $a0, 5000 # Wait one second (1000 milliseconds)
 	syscall	
+
+main_reset_start_point:
 	# ------------------------------------
 	# Clear screen
 	jal clear
@@ -273,11 +275,12 @@ main:
 	#jal print_boundary
 
 	la  $s0, HEALTH1_BOUNDARIES
-	jal print_boundary
+	la  $s1, HEALTH
+	jal draw
 	la  $s0, HEALTH2_BOUNDARIES
-	jal print_boundary
+	jal draw
 	la  $s0, HEALTH3_BOUNDARIES
-	jal print_boundary
+	jal draw
 
 	la  $s0, ENEMY_BOUNDARIES
     la  $s1, ENEMY
@@ -327,7 +330,7 @@ check_reset:
     li $t9, 0xffff0000
 	lw $t8, 0($t9)
     beq $t8, 1, reset_happened
-	beq $s4, 1, j player_move
+	beq $s4, 1, player_move
     j platform1_move
 reset_happened:
 	lw $t2, 4($t9) # this assumes $t9 is set to 0xfff0000 from before
@@ -1670,7 +1673,7 @@ player_health:
 check_finish:
 
 	j end
-	
+
 reset_game:
 	# Get Row Start
 	# 0($s0)
@@ -1692,6 +1695,17 @@ reset_game:
     li $t0, 10
     sw $t0, 12($s0)
 
+	#ENEMY_BOUNDARIES: .word 6, 11, 20, 26
+	la  $s0, ENEMY_BOUNDARIES
+    li $t0, 6
+    sw $t0, 0($s0)
+    li $t0, 11
+    sw $t0, 4($s0)
+    li $t0, 20
+    sw $t0, 8($s0)
+    li $t0, 26
+    sw $t0, 12($s0)
+
     #ENEMY_BULLETS: .word 6, 6, 23, 23
 	la  $s0, ENEMY_BULLETS
     li $t0, 6
@@ -1703,7 +1717,7 @@ reset_game:
     li $t0, 23
     sw $t0, 12($s0)
 
-    j main
+    j main_reset_start_point
 
 end:	
     li $v0, 10
