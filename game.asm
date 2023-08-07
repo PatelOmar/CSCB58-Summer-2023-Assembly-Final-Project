@@ -516,8 +516,8 @@ main:
 	# ------------------------------------
 	# Initialize Game
 	# 
-    li $s2, 5 # Platform1 Shift Distance
-    li $s3, 3 # Platform2 Shift Distance
+    li $s2, 3 # Platform1 Shift Distance
+    li $s3, 1 # Platform2 Shift Distance
     
     li $s4, 1 # Level of Game
     li $s5, 3 # Player health
@@ -1908,10 +1908,10 @@ reset_platform1:
 	# Get Column End
 	# 12($s0)
 	ble $s2, 0, reset_platform1_condition
-    li $s2, -5
+    li $s2, -3
     j reset_platform1_resume
 reset_platform1_condition:
-    li $s2, 5
+    li $s2, 3
 reset_platform1_resume:
     j player_move
 
@@ -1925,10 +1925,10 @@ reset_platform2:
 	# Get Column End
 	# 12($s0)
 	ble $s3, 0, reset_platform2_condition
-    li $s3, -3
+    li $s3, -1
     j reset_platform2_resume
 reset_platform2_condition:
-    li $s3, 3
+    li $s3, 1
 reset_platform2_resume:
     j player_move
 
