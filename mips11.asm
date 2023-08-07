@@ -1943,11 +1943,11 @@ remove_heart1:
 remove_heart3:
 	la  $s0, HEALTH3_BOUNDARIES
 	jal erase_draw
-	j game_start
+	j reset_game
 remove_heart2:
 	la  $s0, HEALTH2_BOUNDARIES
 	jal erase_draw
-	j game_start
+	j reset_game
     
 check_finish:
 	beq $s4, 2, win_game
