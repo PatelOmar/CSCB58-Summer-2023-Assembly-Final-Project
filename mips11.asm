@@ -251,7 +251,7 @@ main:
 	li $a0, 5000 # Wait one second (1000 milliseconds)
 	syscall	
 
-main_reset_start_point:
+
 	# ------------------------------------
 	# Clear screen
 	jal clear
@@ -268,6 +268,7 @@ main_reset_start_point:
     li $s4, 1 # Level of Game
     li $s5, 3 # Player health
 
+main_reset_start_point:
 	# ------------------------------------
 	# Draw Character
 	#jal draw_character
@@ -1687,7 +1688,8 @@ remove_heart2:
 check_finish:
 	beq $s4, 2, win_game
 	addi $s4, $s4, 1
-	j game_start
+
+	j reset_game
 
 lose_game:
 	j end
@@ -1735,6 +1737,28 @@ reset_game:
     li $t0, 23
     sw $t0, 8($s0)
     li $t0, 23
+    sw $t0, 12($s0)
+
+	#PLATFORM1_BOUNDARIES: .word 87, 94, 5, 20
+	la  $s0, PLATFORM1_BOUNDARIES
+    li $t0, 87
+    sw $t0, 0($s0)
+    li $t0, 94
+    sw $t0, 4($s0)
+    li $t0, 5
+    sw $t0, 8($s0)
+    li $t0, 20
+    sw $t0, 12($s0)
+
+	#PLATFORM2_BOUNDARIES: .word 70, 77, 36, 51
+	la  $s0, PLATFORM2_BOUNDARIES
+    li $t0, 70
+    sw $t0, 0($s0)
+    li $t0, 77
+    sw $t0, 4($s0)
+    li $t0, 36
+    sw $t0, 8($s0)
+    li $t0, 51
     sw $t0, 12($s0)
 
     j main_reset_start_point
