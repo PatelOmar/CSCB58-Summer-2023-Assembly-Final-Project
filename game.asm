@@ -534,9 +534,6 @@ main_reset_start_point:
 
 	# ------------------------------------
 	# Draw Character
-	#jal draw_character
-	#la  $s0, CHARACTER_BOUNDARIES
-	#jal print_boundary
 
 	la  $s0, HEALTH1_BOUNDARIES
 	la  $s1, HEALTH
@@ -555,32 +552,17 @@ draw_continue:
     la  $s0, CHARACTER_BOUNDARIES
     la  $s1, CHARACTER
 	jal draw
-
-	#la  $s0, CHARACTER_BOUNDARIES1
-	#li $t1, CHARACTER_BOUNDARIES_LEN
-	#addi $sp, $sp, 4
-	#sw $t1, 0($sp)
-	#jal print_boundary1
 	
 	la  $s0, PLATFORM1_BOUNDARIES
     la  $s1, PLATFORM1
-	#li $t1, PLATFORM1_BOUNDARIES_LEN 
-	#addi $sp, $sp, 4
-	#sw $t1, 0($sp)
 	jal draw
 	
 	la  $s0, PLATFORM2_BOUNDARIES
     la  $s1, PLATFORM2
-	#li $t1, PLATFORM1_BOUNDARIES_LEN 
-	#addi $sp, $sp, 4
-	#sw $t1, 0($sp)
 	jal draw
 	
 	la  $s0, PLATFORM3_BOUNDARIES
     la  $s1, PLATFORM3
-	#li $t1, PLATFORM1_BOUNDARIES_LEN 
-	#addi $sp, $sp, 4
-	#sw $t1, 0($sp)
 	jal draw
 	
 	la  $s0,FINISH_BOUNDARIES
@@ -1485,36 +1467,6 @@ enemy_exit_check_within_game_screen_down_continued:
 	j end
 	# ------------------------------------
 	
-	
-	
-	
-	
-## Boundary Debugger
-#print_boundary1:
-#	li $t0, BASE_ADDRESS
-#	li $t2, WALL_COLOR
-#	lw $t3, 0($sp)
-#	addi $sp, $sp, 4
-#	add $t5, $zero, $zero
-#	sll $t3, $t3, 2
-	
-	
-	
-	
-#print_boundary_loop1:
-#	bge $t5, $t3, end_print_boundary
-	
-	
-#	lw $t6, 0($s0)	
-#	add $t7, $t0, $t6 
-#	sw $t2, ($t7)
-	
-#	addi $s0, $s0, 4
-#	addi $t5, $t5, 4
-#	j print_boundary_loop1
-	
-#end_print_boundary1:
-#	jr $ra	
 
 erase_boundary:
 	li $t0, BASE_ADDRESS
@@ -1701,40 +1653,6 @@ erase_end_draw:
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	jr $ra
-## Draw Character
-#draw_character:
-#	addi $sp, $sp, 4
-#	sw $ra, 0($sp)		# Stores ra
-#	
-#	li $t0, BASE_ADDRESS
-#	la  $t1, CHARACTER_BOUNDARIES
-#	lw $t2, 0($t1)
-#	add $t0, $t0, $t2
-#	
-#	add $t3, $zero, $zero
-	
-#for_loop1_draw_character:
-#	bge $t3, $t2, END
-	
-	
-	
-	
-	
-	# Store 
-#	addi $sp, $sp, -4
-#	sw $t2, 0($sp)		# Stores Bitmap Pixel Location
-	
-#	jal pixel_position
-#	
-	
-	
-#	li $t3, WALL_COLOR
-#	sw $t3, 0($t0)
-	
-#	lw $ra, 0($sp)		# Stores Column Value
-#	addi $sp, $sp, 4
-#	jr $ra
-	
 
 ## Clear the screen.
 clear:	li $t0, BASE_ADDRESS
@@ -1813,15 +1731,8 @@ paint_walls_end:
 	addi $sp, $sp, 4
 	jr $ra
 # Offset
-#xy_offset:
-#	# Formula: offset = 4 * (x + (y * DISPLAY_WIDTH))
-#	mul $v0, $a1, DISPLAY_WIDTH
-#	add $v0, $v0, $a0
-#	sll $v0, $v0, 2
-#	jr $ra
-
 xy_offset:
-	# Formula: offset = 4 * (x + (y * DISPLAY_WIDTH))
+	# Formula: (4 * x) + (y * DISPLAY_WIDTH)
 	sub $a1, $a1, 1
 	mul $v0, $a1, DISPLAY_WIDTH
 	mul $a0, $a0, UNIT_WIDTH
@@ -1829,7 +1740,7 @@ xy_offset:
 	jr $ra
 	
 pixel_position:
-	# Formula: BITMAP_LOCATION/DISPLAY_WIDT
+	# Formula: BITMAP_LOCATION/DISPLAY_WIDTH
 	lw $t8, 0($sp)		# Stores Bitmap Pixel Location
 	addi $sp, $sp, 4
 	sub $t8, $t8, BASE_ADDRESS 
