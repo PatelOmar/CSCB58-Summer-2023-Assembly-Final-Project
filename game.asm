@@ -24,7 +24,7 @@
 # ... (add more if necessary)
 #
 # Link to video demonstration for final submission:
-# - (insert YouTube / MyMedia / other URL here). Make sure we can view it!
+# - https://youtu.be/wcE9w5vn2ek
 #
 # Are you OK with us sharing the video with people outside course staff?
 # - No
